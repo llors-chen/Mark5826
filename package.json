@@ -1,0 +1,21 @@
+{
+  "name": "mark5826-math-platform-mvp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Years 4-6 selective math practice MVP with demo auth and OpenRouter-backed mistake analysis.",
+  "scripts": {
+    "dev:server": "node --watch server.js",
+    "dev:client": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "naive-ui": "^2.44.1",
+    "vue": "^3.5.16"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "vite": "^7.1.2"
+  }
+}
