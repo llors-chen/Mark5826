@@ -1,5 +1,31 @@
 # Project E (Selective Math) Project Plan
 
+## Quick Start
+
+### Requirements
+
+- Node.js `20+`
+- npm `10+`
+
+### Commands
+
+```powershell
+cd ..\mark5826\Mark5826
+npm install
+```
+
+Development
+
+```powershell
+# terminal 1
+npm run dev:server
+
+# terminal 2
+npm run dev:client
+```
+
+---
+
 ## 1. Project Name
 
 **Project E: Selective Math AI-Backed Concept-Mastery and Cloned Parallel Question Engine**
