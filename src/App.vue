@@ -29,7 +29,7 @@ const status = reactive({
   activeRequests: 0,
   maxConcurrency: 3,
   queuedRequests: 0,
-  platformSummary: "检查中",
+  platformSummary: "Checking...",
   modelAvailable: false,
   configured: false,
   checkedAt: "",
@@ -71,18 +71,18 @@ const themeOverrides = {
 
 const headerTitle = computed(() => {
   if (view.value === "practice" && currentBank.value) {
-    return `${currentBank.value.name} 卡片式练习`;
+    return `${currentBank.value.name} Flashcard Practice`;
   }
 
-  return "4-6 年级数学学习平台";
+  return "Math Learning Platform for Years 4-6";
 });
 
 const statusDescription = computed(() => {
   if (view.value === "practice") {
-    return "提交后翻转卡片显示答案，答错时调用大模型生成解析。";
+    return "Submit an answer to flip the card. Incorrect answers trigger a short AI explanation.";
   }
 
-  return "登录、题库选择、卡片做题和模型状态监控都已经接入。";
+  return "Login, question bank selection, flashcard practice, and model status monitoring are all connected.";
 });
 
 function readStoredUser() {
@@ -119,7 +119,7 @@ async function requestJson(url, options = {}) {
 
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.message || "请求失败");
+    throw new Error(data.message || "Request failed");
   }
 
   return data;
@@ -140,7 +140,7 @@ async function refreshStatus(force = false) {
       activeRequests: 0,
       maxConcurrency: 3,
       queuedRequests: 0,
-      platformSummary: "状态接口失败",
+      platformSummary: "Status endpoint unavailable",
       modelAvailable: false,
       configured: false,
       checkedAt: new Date().toISOString(),
@@ -263,9 +263,10 @@ onBeforeUnmount(() => {
               <n-card class="feature-card" :bordered="false">
                 <n-space vertical :size="20">
                   <n-thing>
-                    <template #header>Vue 3 + Naive UI 前端基座</template>
+                    <template #header>Vue 3 + Naive UI Frontend Base</template>
                     <template #description>
-                      这一版前端已经改成 Vue 组件结构，后续接真实题库、学习报告和教师端都会更顺手。
+                      This frontend now uses a Vue component structure, making it easier to connect real question banks,
+                      learning reports, and a future teacher dashboard.
                     </template>
                   </n-thing>
 
@@ -276,7 +277,7 @@ onBeforeUnmount(() => {
                   </n-space>
 
                   <n-alert type="info" :show-icon="false">
-                    演示登录账号：<strong>admin</strong>，密码：<strong>123456</strong>
+                    Demo login: <strong>admin</strong>, password: <strong>123456</strong>
                   </n-alert>
                 </n-space>
               </n-card>
@@ -285,21 +286,21 @@ onBeforeUnmount(() => {
             <n-grid-item>
               <n-card class="feature-card" :bordered="false">
                 <n-form label-placement="top" @submit.prevent="login">
-                  <n-form-item label="用户名">
-                    <n-input v-model:value="loginForm.username" size="large" placeholder="请输入用户名" />
+                  <n-form-item label="Username">
+                    <n-input v-model:value="loginForm.username" size="large" placeholder="Enter your username" />
                   </n-form-item>
-                  <n-form-item label="密码">
+                  <n-form-item label="Password">
                     <n-input
                       v-model:value="loginForm.password"
                       type="password"
                       size="large"
-                      placeholder="请输入密码"
+                      placeholder="Enter your password"
                       show-password-on="click"
                     />
                   </n-form-item>
                   <n-space vertical :size="12">
                     <n-button type="primary" size="large" :loading="loginLoading" @click="login">
-                      进入平台
+                      Enter Platform
                     </n-button>
                     <n-alert v-if="loginError" type="error" :show-icon="false">
                       {{ loginError }}
@@ -315,11 +316,11 @@ onBeforeUnmount(() => {
           <n-space justify="space-between" align="center" class="section-toolbar">
             <div>
               <p class="section-kicker">Question Banks</p>
-              <h2 class="section-title">选择题库</h2>
+              <h2 class="section-title">Choose a Question Bank</h2>
             </div>
             <n-space>
-              <n-button quaternary type="primary" @click="refreshStatus(true)">刷新模型状态</n-button>
-              <n-button tertiary @click="logout">退出登录</n-button>
+              <n-button quaternary type="primary" @click="refreshStatus(true)">Refresh Model Status</n-button>
+              <n-button tertiary @click="logout">Log Out</n-button>
             </n-space>
           </n-space>
 
@@ -337,16 +338,16 @@ onBeforeUnmount(() => {
                         <p class="section-kicker">{{ bank.subtitle }}</p>
                         <h3 class="section-title section-title--small">{{ bank.name }}</h3>
                       </div>
-                      <n-tag round type="info">{{ bank.questionCount }} 题演示</n-tag>
+                      <n-tag round type="info">{{ bank.questionCount }} demo questions</n-tag>
                     </n-space>
 
                     <div class="card-copy">{{ bank.description }}</div>
 
                     <n-space justify="space-between" align="center">
                       <n-tag round :type="bank.connected ? 'success' : 'warning'">
-                        {{ bank.connected ? "真实题库" : "占位题库" }}
+                        {{ bank.connected ? "Live question bank" : "Placeholder question bank" }}
                       </n-tag>
-                      <n-button type="primary" @click="openBank(bank.id)">进入题库</n-button>
+                      <n-button type="primary" @click="openBank(bank.id)">Open Bank</n-button>
                     </n-space>
                   </n-space>
                 </n-card>
@@ -359,25 +360,26 @@ onBeforeUnmount(() => {
           <n-space justify="space-between" align="center" class="section-toolbar">
             <div>
               <p class="section-kicker">{{ currentBank?.name || "GMSK" }} Demo</p>
-              <h2 class="section-title">{{ currentBank?.name || "GMSK" }} 卡片式练习</h2>
+              <h2 class="section-title">{{ currentBank?.name || "GMSK" }} Flashcard Practice</h2>
             </div>
             <n-space>
-              <n-button quaternary type="primary" @click="refreshStatus(true)">刷新模型状态</n-button>
-              <n-button tertiary @click="view = 'home'">返回题库</n-button>
+              <n-button quaternary type="primary" @click="refreshStatus(true)">Refresh Model Status</n-button>
+              <n-button tertiary @click="view = 'home'">Back to Banks</n-button>
             </n-space>
           </n-space>
 
           <n-alert type="info" :show-icon="false" class="section-alert">
-            每道题是一张卡片。提交后会翻面显示正确答案；如果答错，会调用
-            <code>nvidia/nemotron-3-super-120b-a12b:free</code> 输出面向 4-6 年级学生的简洁解析。
+            Each question is presented as a card. After you submit, the card flips to reveal the answer. If the
+            answer is incorrect, <code>nvidia/nemotron-3-super-120b-a12b:free</code> provides a short explanation
+            for Years 4-6 learners.
           </n-alert>
 
           <n-spin :show="loadingQuestions">
             <n-result
               v-if="!questions.length && !loadingQuestions"
               status="418"
-              title="题目还没加载出来"
-              description="当前题库是演示数据。如果后续接入真实题库，这里会直接展示题目列表。"
+              title="Questions have not loaded yet"
+              description="This bank currently uses demo data. Once a live question bank is connected, the question list will appear here."
             />
 
             <n-grid v-else cols="1 m:2" responsive="screen" :x-gap="24" :y-gap="24">

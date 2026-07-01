@@ -25,8 +25,9 @@ const QUESTION_BANKS = [
   {
     id: "gmsk",
     name: "GMSK",
-    subtitle: "当前演示题库",
-    description: "目前首页仅展示 GMSK 题库入口。真实题库尚未接入，这里先用 4 道演示题完成交互流程。",
+    subtitle: "Current demo question bank",
+    description:
+      "The homepage currently shows only the GMSK entry point. A live bank is not connected yet, so this flow uses 4 demo questions.",
     connected: false,
     questionCount: 4,
   },
@@ -36,50 +37,50 @@ const QUESTIONS = [
   {
     id: "q1",
     bankId: "gmsk",
-    title: "速算练习",
-    concept: "四则运算",
+    title: "Mental Math Drill",
+    concept: "Basic Operations",
     difficulty: "Year 4",
-    prompt: "计算：48 ÷ 6 + 7 = ?",
+    prompt: "Calculate: 48 ÷ 6 + 7 = ?",
     answerText: "15",
     acceptedAnswers: ["15"],
     fallbackExplanation:
-      "先算除法 48 ÷ 6 = 8，再算加法 8 + 7 = 15。遇到混合运算时，先乘除，后加减。",
+      "Work out the division first: 48 ÷ 6 = 8. Then add 7 to get 15. In mixed operations, do multiplication and division before addition and subtraction.",
   },
   {
     id: "q2",
     bankId: "gmsk",
-    title: "分数应用",
-    concept: "分数",
+    title: "Fractions in Context",
+    concept: "Fractions",
     difficulty: "Year 5",
-    prompt: "一个班有 24 名学生，其中 3/4 参加了合唱队。参加合唱队的有多少人？",
-    answerText: "18 人",
-    acceptedAnswers: ["18", "18人"],
+    prompt: "A class has 24 students. If 3/4 of them joined the choir, how many students joined the choir?",
+    answerText: "18 students",
+    acceptedAnswers: ["18", "18students", "18student"],
     fallbackExplanation:
-      "求 24 的 3/4，就是先用 24 ÷ 4 = 6，再用 6 × 3 = 18，所以参加合唱队的有 18 人。",
+      "To find 3/4 of 24, divide 24 by 4 to get 6, then multiply 6 by 3 to get 18. So 18 students joined the choir.",
   },
   {
     id: "q3",
     bankId: "gmsk",
-    title: "小数与周长",
-    concept: "测量",
+    title: "Perimeter Practice",
+    concept: "Measurement",
     difficulty: "Year 6",
-    prompt: "一个长方形的长是 9 cm，宽是 6 cm，它的周长是多少厘米？",
+    prompt: "A rectangle is 9 cm long and 6 cm wide. What is its perimeter?",
     answerText: "30 cm",
     acceptedAnswers: ["30", "30cm"],
     fallbackExplanation:
-      "长方形周长 = (长 + 宽) × 2，所以 (9 + 6) × 2 = 15 × 2 = 30 cm。",
+      "Perimeter of a rectangle = (length + width) × 2, so (9 + 6) × 2 = 15 × 2 = 30 cm.",
   },
   {
     id: "q4",
     bankId: "gmsk",
-    title: "百分数",
-    concept: "百分数",
+    title: "Percentages",
+    concept: "Percentages",
     difficulty: "Year 6",
-    prompt: "一本书原价 80 元，打九折后售价是多少元？",
-    answerText: "72 元",
-    acceptedAnswers: ["72", "72元"],
+    prompt: "A book originally costs 80 yuan. What is the sale price after a 10% discount?",
+    answerText: "72 yuan",
+    acceptedAnswers: ["72", "72yuan"],
     fallbackExplanation:
-      "九折表示付原价的 90%。先把 80 × 0.9，得到 72，所以现价是 72 元。",
+      "A 10% discount means you pay 90% of the original price. Calculate 80 × 0.9 = 72, so the sale price is 72 yuan.",
   },
 ];
 
@@ -259,9 +260,7 @@ function normalizeAnswer(value) {
     .trim()
     .toLowerCase()
     .replace(/\s+/g, "")
-    .replace(/[，,。.!?？]/g, "")
-    .replace(/厘米/g, "cm")
-    .replace(/元/g, "元");
+    .replace(/[,.!?]/g, "");
 }
 
 function checkAnswer(question, userAnswer) {
@@ -459,7 +458,7 @@ async function buildLlmStatus() {
     model: MODEL_ID,
     configured: Boolean(apiKey),
     platformReachable: false,
-    platformSummary: "未检查",
+    platformSummary: "Not checked",
     modelAvailable: false,
     maxConcurrency: queueStats.maxConcurrency,
     activeRequests: queueStats.activeRequests,
@@ -536,7 +535,7 @@ async function getLlmStatus(forceRefresh = false) {
         model: MODEL_ID,
         configured: Boolean(getOpenRouterApiKey()),
         platformReachable: false,
-        platformSummary: "检查失败",
+        platformSummary: "Check failed",
         modelAvailable: false,
         ...analysisGate.getStats(),
         checkedAt: new Date().toISOString(),
@@ -553,7 +552,7 @@ async function generateMistakeAnalysis(question, studentAnswer) {
   if (!apiKey) {
     return {
       source: "fallback",
-      analysis: `模型当前未配置，先使用本地解析：${question.fallbackExplanation}`,
+      analysis: `The model is not configured right now, so here is the local explanation: ${question.fallbackExplanation}`,
     };
   }
 
@@ -563,15 +562,15 @@ async function generateMistakeAnalysis(question, studentAnswer) {
       {
         role: "system",
         content:
-          "你是一名面向 4-6 年级学生的数学老师。请用简洁中文输出两小段：1. 错误点 2. 正确思路。控制在 120 字内，语气温和，不要使用复杂术语。",
+          "You are a math teacher for students in Years 4-6. Reply in concise English using two short parts: 1. Mistake 2. Correct approach. Keep it under 120 words, use a warm tone, and avoid complex terminology.",
       },
       {
         role: "user",
         content: [
-          `题目：${question.prompt}`,
-          `知识点：${question.concept}`,
-          `学生答案：${studentAnswer}`,
-          `正确答案：${question.answerText}`,
+          `Question: ${question.prompt}`,
+          `Concept: ${question.concept}`,
+          `Student answer: ${studentAnswer}`,
+          `Correct answer: ${question.answerText}`,
         ].join("\n"),
       },
     ],
@@ -600,12 +599,12 @@ async function generateMistakeAnalysis(question, studentAnswer) {
 
     return {
       source: "fallback",
-      analysis: `模型暂时不可用，先使用本地解析：${question.fallbackExplanation}`,
+      analysis: `The model is temporarily unavailable, so here is the local explanation: ${question.fallbackExplanation}`,
     };
   } catch (error) {
     return {
       source: "fallback",
-      analysis: `模型连接失败，先使用本地解析：${question.fallbackExplanation}`,
+      analysis: `The model connection failed, so here is the local explanation: ${question.fallbackExplanation}`,
     };
   }
 }
@@ -627,7 +626,7 @@ async function handleLogin(req, res) {
 
   return sendJson(res, 401, {
     ok: false,
-    message: "用户名或密码错误。演示账号：admin / 123456",
+    message: "Incorrect username or password. Demo account: admin / 123456",
   });
 }
 
@@ -641,7 +640,7 @@ function handleQuestions(res, bankId) {
   const bank = QUESTION_BANKS.find((item) => item.id === bankId);
   if (!bank) {
     return sendJson(res, 404, {
-      message: "题库不存在",
+      message: "Question bank not found",
     });
   }
 
@@ -664,7 +663,7 @@ async function handleSubmission(req, res, questionId) {
   const question = findQuestionById(questionId);
   if (!question) {
     return sendJson(res, 404, {
-      message: "题目不存在",
+      message: "Question not found",
     });
   }
 
@@ -673,7 +672,7 @@ async function handleSubmission(req, res, questionId) {
 
   if (!answer) {
     return sendJson(res, 400, {
-      message: "请先输入答案。",
+      message: "Please enter an answer first.",
     });
   }
 
@@ -685,7 +684,7 @@ async function handleSubmission(req, res, questionId) {
       submittedAnswer: answer,
       correctAnswer: question.answerText,
       analysis:
-        "回答正确。你已经抓住这道题的关键步骤了，可以继续挑战下一题。",
+        "Correct. You used the key steps for this question, so you are ready to move on to the next one.",
       source: "local",
       queue: analysisGate.getStats(),
     });
@@ -742,6 +741,12 @@ const server = http.createServer(async (req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host || "localhost"}`);
 
   try {
+    if (req.method === "GET" && requestUrl.pathname === "/health") {
+      return sendJson(res, 200, {
+        ok: true,
+      });
+    }
+
     if (requestUrl.pathname.startsWith("/api/")) {
       return await handleApi(req, res, requestUrl.pathname);
     }

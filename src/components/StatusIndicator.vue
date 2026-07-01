@@ -16,9 +16,9 @@ const statusType = computed(() => {
 });
 
 const statusLabel = computed(() => {
-  if (props.status.state === "ready") return "模型就绪";
-  if (props.status.state === "busy") return "模型繁忙";
-  return "模型不可用";
+  if (props.status.state === "ready") return "Model Ready";
+  if (props.status.state === "busy") return "Model Busy";
+  return "Model Unavailable";
 });
 </script>
 
@@ -27,7 +27,7 @@ const statusLabel = computed(() => {
     <n-space vertical :size="12">
       <n-space align="center" justify="space-between">
         <n-thing>
-          <template #header>OpenRouter 监控</template>
+          <template #header>OpenRouter Monitor</template>
           <template #description>{{ status.model }}</template>
         </n-thing>
         <n-tag round :type="statusType" size="large">
@@ -36,21 +36,21 @@ const statusLabel = computed(() => {
       </n-space>
 
       <n-space wrap>
-        <n-tag round type="info">并发 {{ status.activeRequests }}/{{ status.maxConcurrency }}</n-tag>
+        <n-tag round type="info">Concurrency {{ status.activeRequests }}/{{ status.maxConcurrency }}</n-tag>
         <n-tag round :type="status.queuedRequests > 0 ? 'warning' : 'success'">
-          排队 {{ status.queuedRequests }}
+          Queue {{ status.queuedRequests }}
         </n-tag>
         <n-tag round :type="status.modelAvailable ? 'success' : 'error'">
-          模型{{ status.modelAvailable ? "已找到" : "不可用" }}
+          Model {{ status.modelAvailable ? "found" : "unavailable" }}
         </n-tag>
         <n-tag round :type="status.configured ? 'success' : 'error'">
-          Key {{ status.configured ? "已配置" : "未配置" }}
+          Key {{ status.configured ? "configured" : "missing" }}
         </n-tag>
       </n-space>
 
       <div class="status-meta">
-        平台状态：{{ status.platformSummary }}<br />
-        最近检查：{{ new Date(status.checkedAt || Date.now()).toLocaleString() }}
+        Platform status: {{ status.platformSummary }}<br />
+        Last checked: {{ new Date(status.checkedAt || Date.now()).toLocaleString() }}
       </div>
     </n-space>
   </n-card>

@@ -24,6 +24,30 @@ npm run dev:server
 npm run dev:client
 ```
 
+Production build
+
+```powershell
+npm run build
+npm start
+```
+
+## Deploy Publicly
+
+The simplest full-stack deployment path is Render Web Service because this app needs both the Vite frontend and the Node API.
+
+1. Push this repository to GitHub.
+2. Open https://dashboard.render.com/blueprints and create a new Blueprint from the GitHub repo.
+3. Render will read `render.yaml` automatically.
+4. Add the secret environment variable `OPENROUTER_API_KEY` in Render.
+5. Deploy. The public URL will look like `https://mark5826.onrender.com`.
+
+The demo login is:
+
+```text
+username: admin
+password: 123456
+```
+
 ---
 
 ## 1. Project Name

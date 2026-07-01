@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "Years 4-6 selective math practice MVP with demo auth and OpenRouter-backed mistake analysis.",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "dev:server": "node --watch server.js",
     "dev:client": "vite",

@@ -38,20 +38,20 @@ const resultType = computed(() => {
 
 const resultLabel = computed(() => {
   if (!result.value) {
-    return "待批改";
+    return "Pending Review";
   }
 
-  return result.value.correct ? "回答正确" : "需要复盘";
+  return result.value.correct ? "Correct Answer" : "Needs Review";
 });
 
 async function submit() {
   if (!answer.value.trim()) {
-    feedback.value = "请先填写答案。";
+    feedback.value = "Please enter an answer first.";
     return;
   }
 
   pending.value = true;
-  feedback.value = "正在批改。若答错，将进入模型解析队列。";
+  feedback.value = "Checking your answer. If it is incorrect, it will enter the AI explanation queue.";
 
   try {
     const submission = await props.submitAnswer(props.question.id, answer.value.trim());
@@ -60,7 +60,7 @@ async function submit() {
     flipped.value = true;
     emit("submitted", submission);
   } catch (error) {
-    feedback.value = error.message || "提交失败";
+    feedback.value = error.message || "Submission failed";
   } finally {
     pending.value = false;
   }
@@ -96,12 +96,12 @@ function resetCard() {
             <n-space vertical :size="12">
               <n-input
                 v-model:value="answer"
-                placeholder="请输入答案"
+                placeholder="Enter your answer"
                 size="large"
                 @keyup.enter="submit"
               />
               <n-button type="primary" size="large" :loading="pending" @click="submit">
-                提交并查看结果
+                Submit and View Result
               </n-button>
               <n-text depth="3">{{ feedback }}</n-text>
             </n-space>
@@ -116,14 +116,14 @@ function resetCard() {
               {{ resultLabel }}
             </n-tag>
             <h3 class="question-title">
-              {{ result?.correct ? "这道题做对了" : "看看正确答案和错因" }}
+              {{ result?.correct ? "You solved this one correctly" : "Review the correct answer and explanation" }}
             </h3>
-            <div class="answer-panel">正确答案：{{ result?.correctAnswer }}</div>
+            <div class="answer-panel">Correct answer: {{ result?.correctAnswer }}</div>
             <div class="analysis-panel">{{ result?.analysis }}</div>
             <n-text depth="3">
-              解析来源：{{ result?.source === "model" ? "OpenRouter 模型" : "本地兜底解析" }}
+              Explanation source: {{ result?.source === "model" ? "OpenRouter model" : "Local fallback" }}
             </n-text>
-            <n-button tertiary type="primary" @click="resetCard">返回题面</n-button>
+            <n-button tertiary type="primary" @click="resetCard">Back to Question</n-button>
           </n-space>
         </n-card>
       </div>
