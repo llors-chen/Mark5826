@@ -7,6 +7,48 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  lang: {
+    type: String,
+    default: "en",
+  },
+});
+
+const t = computed(() => {
+  if (props.lang === "zh") {
+    return {
+      title: "OpenRouter 监控",
+      ready: "模型就绪",
+      busy: "模型繁忙",
+      unavailable: "模型不可用",
+      concurrency: "并发",
+      queue: "队列",
+      model: "模型",
+      found: "可用",
+      modelUnavailable: "不可用",
+      key: "密钥",
+      configured: "已配置",
+      missing: "缺失",
+      platformStatus: "平台状态",
+      lastChecked: "上次检查",
+    };
+  }
+
+  return {
+    title: "OpenRouter Monitor",
+    ready: "Model Ready",
+    busy: "Model Busy",
+    unavailable: "Model Unavailable",
+    concurrency: "Concurrency",
+    queue: "Queue",
+    model: "Model",
+    found: "found",
+    modelUnavailable: "unavailable",
+    key: "Key",
+    configured: "configured",
+    missing: "missing",
+    platformStatus: "Platform status",
+    lastChecked: "Last checked",
+  };
 });
 
 const statusType = computed(() => {
@@ -16,9 +58,9 @@ const statusType = computed(() => {
 });
 
 const statusLabel = computed(() => {
-  if (props.status.state === "ready") return "Model Ready";
-  if (props.status.state === "busy") return "Model Busy";
-  return "Model Unavailable";
+  if (props.status.state === "ready") return t.value.ready;
+  if (props.status.state === "busy") return t.value.busy;
+  return t.value.unavailable;
 });
 </script>
 
@@ -27,7 +69,7 @@ const statusLabel = computed(() => {
     <n-space vertical :size="12">
       <n-space align="center" justify="space-between">
         <n-thing>
-          <template #header>OpenRouter Monitor</template>
+          <template #header>{{ t.title }}</template>
           <template #description>{{ status.model }}</template>
         </n-thing>
         <n-tag round :type="statusType" size="large">
@@ -36,21 +78,21 @@ const statusLabel = computed(() => {
       </n-space>
 
       <n-space wrap>
-        <n-tag round type="info">Concurrency {{ status.activeRequests }}/{{ status.maxConcurrency }}</n-tag>
+        <n-tag round type="info">{{ t.concurrency }} {{ status.activeRequests }}/{{ status.maxConcurrency }}</n-tag>
         <n-tag round :type="status.queuedRequests > 0 ? 'warning' : 'success'">
-          Queue {{ status.queuedRequests }}
+          {{ t.queue }} {{ status.queuedRequests }}
         </n-tag>
         <n-tag round :type="status.modelAvailable ? 'success' : 'error'">
-          Model {{ status.modelAvailable ? "found" : "unavailable" }}
+          {{ t.model }} {{ status.modelAvailable ? t.found : t.modelUnavailable }}
         </n-tag>
         <n-tag round :type="status.configured ? 'success' : 'error'">
-          Key {{ status.configured ? "configured" : "missing" }}
+          {{ t.key }} {{ status.configured ? t.configured : t.missing }}
         </n-tag>
       </n-space>
 
       <div class="status-meta">
-        Platform status: {{ status.platformSummary }}<br />
-        Last checked: {{ new Date(status.checkedAt || Date.now()).toLocaleString() }}
+        {{ t.platformStatus }}: {{ status.platformSummary }}<br />
+        {{ t.lastChecked }}: {{ new Date(status.checkedAt || Date.now()).toLocaleString() }}
       </div>
     </n-space>
   </n-card>

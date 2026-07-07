@@ -52,9 +52,25 @@ body {
   padding: 20px 0 8px;
 }
 
+.header-tools {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  justify-items: end;
+}
+
+.language-toggle {
+  min-width: 84px;
+}
+
+.top-nav {
+  margin-bottom: 18px;
+}
+
 .hero-title,
 .section-title,
-.question-title {
+.question-title,
+.home-hero__title {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
   letter-spacing: 0.02em;
@@ -97,6 +113,80 @@ body {
   gap: 22px;
 }
 
+.landing-page {
+  gap: 28px;
+}
+
+.home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 420px);
+  gap: 24px;
+  align-items: stretch;
+  min-height: 360px;
+}
+
+.home-hero__copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px 0;
+}
+
+.home-hero__title {
+  max-width: 860px;
+  font-size: clamp(2.1rem, 3vw, 4rem);
+  line-height: 1.08;
+}
+
+.hero-actions {
+  margin-top: 24px;
+}
+
+.hero-side-card,
+.price-card,
+.auth-card {
+  border-radius: var(--radius-xl) !important;
+  background: var(--bg-layer) !important;
+  box-shadow: var(--shadow-soft);
+}
+
+.hero-side-card {
+  align-self: center;
+}
+
+.hero-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.hero-metric-grid div {
+  min-height: 96px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.hero-metric-grid strong {
+  display: block;
+  color: #1e3a8a;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.hero-metric-grid span {
+  display: block;
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.content-band {
+  display: grid;
+  gap: 18px;
+}
+
 .feature-card,
 .bank-card,
 .question-card,
@@ -116,6 +206,113 @@ body {
 
 .section-title--small {
   font-size: 1.5rem;
+}
+
+.price-card {
+  min-height: 280px;
+}
+
+.price-line {
+  color: #1e3a8a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.plain-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 18px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.topic-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.course-timeline {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.course-step {
+  min-height: 190px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--bg-layer);
+  box-shadow: var(--shadow-soft);
+}
+
+.course-step span {
+  display: inline-flex;
+  margin-bottom: 14px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+.course-step h3 {
+  margin: 0 0 10px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+}
+
+.course-step p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.auth-section {
+  max-width: 1120px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.auth-card {
+  min-height: 520px;
+}
+
+.auth-card--intro {
+  background:
+    linear-gradient(135deg, rgba(29, 78, 216, 0.11), rgba(255, 255, 255, 0.8)),
+    var(--bg-layer) !important;
+}
+
+.auth-heading {
+  margin-bottom: 22px;
+}
+
+.benefit-list {
+  display: grid;
+  gap: 14px;
+}
+
+.benefit-list div {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.benefit-list strong,
+.benefit-list span {
+  display: block;
+}
+
+.benefit-list span {
+  margin-top: 6px;
+  color: var(--text-muted);
+  line-height: 1.6;
 }
 
 .section-alert {
@@ -182,6 +379,19 @@ code {
   .app-header {
     grid-template-columns: 1fr;
   }
+
+  .header-tools {
+    justify-items: stretch;
+  }
+
+  .language-toggle {
+    justify-self: end;
+  }
+
+  .home-hero,
+  .course-timeline {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
@@ -195,5 +405,25 @@ code {
   .flip-card__inner,
   .question-card {
     min-height: 430px;
+  }
+
+  .home-hero {
+    min-height: auto;
+  }
+
+  .home-hero__copy {
+    padding-top: 10px;
+  }
+
+  .hero-metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-card {
+    min-height: auto;
+  }
+
+  .section-toolbar {
+    align-items: flex-start !important;
   }
 }
