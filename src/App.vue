@@ -64,30 +64,71 @@ const registerForm = reactive({
 
 const pricingPlans = [
   {
-    name: { en: "Trial Plan", zh: "体验版" },
+    name: { en: "Free Version", zh: "免费版本" },
     price: "$0",
-    note: { en: "Best for previewing question types and explanation style.", zh: "适合先看题型与讲解风格。" },
+    note: { en: "Start with a lightweight preview before choosing a paid plan.", zh: "适合先体验题型、讲解风格和学习流程。" },
     features: {
-      en: ["10 selected sample questions", "AI mistake explanation preview", "Basic learning pathway"],
-      zh: ["10 道精选样题", "AI 错题讲解预览", "基础学习路径"],
+      en: ["Selected sample questions", "AI mistake explanation preview", "Basic learning pathway"],
+      zh: ["精选样题体验", "AI 错题讲解预览", "基础学习路径"],
     },
   },
   {
-    name: { en: "Standard Pack", zh: "标准课包" },
-    price: "$49",
-    note: { en: "Built for steady practice across Years 4-6.", zh: "适合 4-6 年级持续练习。" },
+    name: { en: "Paid Version", zh: "付费版本" },
+    price: "$29/mo",
+    note: { en: "Monthly access for steady practice, review, and course planning.", zh: "月付版本每月 29 美元，适合持续练习、复盘和课程规划。" },
     features: {
-      en: ["6-week course guide", "Topic-based question banks", "Mistake review suggestions"],
-      zh: ["6 周课程指南", "分主题题库", "错题复盘建议"],
+      en: ["Full topic-based question banks", "AI mistake review suggestions", "Monthly flexible subscription"],
+      zh: ["完整分主题题库", "AI 错题复盘建议", "按月灵活订阅"],
     },
   },
   {
-    name: { en: "Partner Campus", zh: "合作校区" },
-    price: { en: "Custom", zh: "面议" },
-    note: { en: "For tutoring centres, teachers, and local partners.", zh: "适合机构、老师与校区招商合作。" },
+    name: { en: "Lifetime Version", zh: "买断版本" },
+    price: "$240",
+    note: { en: "One-time purchase for long-term individual learning access.", zh: "买断版本 240 美元，适合长期个人学习使用。" },
     features: {
-      en: ["Co-branded display", "Shared question content", "Classroom management plan"],
-      zh: ["品牌联合展示", "题库内容共建", "班级管理方案"],
+      en: ["One-time payment", "Long-term access to practice content", "Ongoing course-guide updates"],
+      zh: ["一次性购买", "长期访问练习内容", "持续获得课程指南更新"],
+    },
+  },
+  {
+    name: { en: "Enterprise Version", zh: "企业版本" },
+    price: { en: "Custom", zh: "定制报价" },
+    note: {
+      en: "For schools, tutoring centres, and teams that need bulk seats and managed rollout.",
+      zh: "面向学校、补习机构和团队采购，支持批量账号、统一管理和定制落地方案。",
+    },
+    features: {
+      en: ["Bulk account purchase", "Class or campus management", "Custom onboarding and support"],
+      zh: ["批量账号购买", "班级或校区管理", "定制 onboarding 与支持"],
+    },
+  },
+];
+
+const accountComparison = [
+  {
+    type: "free",
+    name: { en: "Free Account", zh: "Free 账户" },
+    badge: { en: "Default preview", zh: "默认体验" },
+    detail: {
+      en: "Shows demo access only, with about 5 questions in each grade bank.",
+      zh: "默认进入 Free 账户，只展示 demo 内容，每个年级题库大约 5 道题。",
+    },
+    features: {
+      en: ["Demo questions only", "Limited grade-bank preview", "Basic AI explanation preview"],
+      zh: ["仅 demo 题目", "有限年级题库预览", "基础 AI 讲解预览"],
+    },
+  },
+  {
+    type: "paid",
+    name: { en: "Paid Account", zh: "付款账户" },
+    badge: { en: "After demo login", zh: "假登录后显示" },
+    detail: {
+      en: "Unlocks the complete question sets for each grade bank in this prototype.",
+      zh: "假登录成功后显示为付款账户，可看到每个年级题库的完整题目数量。",
+    },
+    features: {
+      en: ["Full question banks", "More practice per grade", "Mistake review and course planning"],
+      zh: ["完整题库", "每个年级更多练习", "错题复盘与课程规划"],
     },
   },
 ];
@@ -155,6 +196,7 @@ const i18n = {
       "For upper-primary selective math preparation across number operations, geometry, logical reasoning, and word-problem modelling. Students practise first, then use mistake explanations to see what to improve next.",
     loginNow: "Log In",
     registerNow: "Register Preview",
+    freeDemo: "View Free Demo",
     todayOpen: "Open Today",
     selectedBank: "Selected question bank + AI mistake explanations",
     yearsCovered: "year levels",
@@ -164,6 +206,15 @@ const i18n = {
     priceKicker: "Price Disclosure",
     priceTitle: "Public Pricing",
     transparent: "Transparent",
+    accountKicker: "Account Access",
+    accountTitle: "Free vs Paid Account",
+    currentAccount: "Current account",
+    freeAccount: "Free account",
+    paidAccount: "Paid account",
+    freeAccountNote: "Demo mode: about 5 questions per grade bank.",
+    paidAccountNote: "Paid mode: full question banks are visible.",
+    paidLoginHint: "Demo login upgrades this preview to a paid account.",
+    questions: "questions",
     contentKicker: "Question-Oriented Content",
     contentTitle: "Topic-Focused Practice",
     contentCopy:
@@ -252,6 +303,7 @@ const i18n = {
       "面向小学高年级择校数学训练，覆盖数字运算、图形空间、逻辑推理和应用题建模。学生可以先做题，再通过错题讲解看到下一步该补什么。",
     loginNow: "立即登录",
     registerNow: "注册体验",
+    freeDemo: "查看 Free Demo",
     todayOpen: "今日开放内容",
     selectedBank: "精选题库 + AI 错题讲解",
     yearsCovered: "年级覆盖",
@@ -261,6 +313,15 @@ const i18n = {
     priceKicker: "价格公示",
     priceTitle: "价格公示",
     transparent: "公开透明",
+    accountKicker: "账户权限",
+    accountTitle: "Free 账户与付款账户区别",
+    currentAccount: "当前账户",
+    freeAccount: "Free 账户",
+    paidAccount: "付款账户",
+    freeAccountNote: "Demo 模式：每个年级题库约 5 道题。",
+    paidAccountNote: "付款模式：展示完整题库内容。",
+    paidLoginHint: "使用 demo 假登录后，这个视觉稿会显示为付款账户。",
+    questions: "道题",
     contentKicker: "题目面向内容",
     contentTitle: "题目面向内容",
     contentCopy: "题目围绕 Selective 数学常见能力展开，先看概念掌握，再看速度、审题和表达。",
@@ -326,6 +387,11 @@ const i18n = {
 
 const t = computed(() => i18n[lang.value]);
 const isZh = computed(() => lang.value === "zh");
+const accountType = computed(() => (user.value?.accountType === "paid" ? "paid" : "free"));
+const isPaidAccount = computed(() => accountType.value === "paid");
+const accountLabel = computed(() => (isPaidAccount.value ? t.value.paidAccount : t.value.freeAccount));
+const accountNote = computed(() => (isPaidAccount.value ? t.value.paidAccountNote : t.value.freeAccountNote));
+const accountTagType = computed(() => (isPaidAccount.value ? "success" : "warning"));
 
 const themeOverrides = {
   common: {
@@ -357,7 +423,7 @@ const headerTitle = computed(() => {
   }
 
   if (view.value === "practice" && currentBank.value) {
-    return `${currentBank.value.name} ${t.value.practiceTitleSuffix}`;
+    return `${copy(currentBank.value.name)} ${t.value.practiceTitleSuffix}`;
   }
 
   return t.value.defaultTitle;
@@ -396,11 +462,27 @@ function toggleLang() {
 }
 
 function bankSubtitle(bank) {
-  return bank.id === "gmsk" ? t.value.bankSubtitle : bank.subtitle;
+  return copy(bank.subtitle) || t.value.bankSubtitle;
 }
 
 function bankDescription(bank) {
-  return bank.id === "gmsk" ? t.value.bankDescription : bank.description;
+  return copy(bank.description) || t.value.bankDescription;
+}
+
+function questionCountText(bank) {
+  if (isPaidAccount.value) {
+    return isZh.value ? `${bank.questionCount}${t.value.questions}` : `${bank.questionCount} ${t.value.questions}`;
+  }
+
+  return isZh.value ? `${bank.questionCount}${t.value.demoQuestions}` : `${bank.questionCount} ${t.value.demoQuestions}`;
+}
+
+function showBanks() {
+  view.value = "home";
+
+  if (!banks.value.length) {
+    loadBanks();
+  }
 }
 
 function readStoredUser() {
@@ -479,7 +561,8 @@ async function loadBanks() {
   generalError.value = "";
 
   try {
-    const data = await requestJson("/api/banks");
+    const params = new URLSearchParams({ account: accountType.value });
+    const data = await requestJson(`/api/banks?${params.toString()}`);
     banks.value = data.banks || [];
   } catch (error) {
     generalError.value = error.message;
@@ -493,7 +576,8 @@ async function openBank(bankId) {
   generalError.value = "";
 
   try {
-    const data = await requestJson(`/api/banks/${bankId}/questions`);
+    const params = new URLSearchParams({ account: accountType.value });
+    const data = await requestJson(`/api/banks/${bankId}/questions?${params.toString()}`);
     currentBank.value = data.bank;
     questions.value = data.questions || [];
     view.value = "practice";
@@ -524,11 +608,12 @@ async function login() {
   }
 }
 
-function logout() {
+async function logout() {
   clearUser();
   currentBank.value = null;
   questions.value = [];
   view.value = "landing";
+  await loadBanks();
 }
 
 async function submitAnswer(questionId, answer) {
@@ -548,9 +633,7 @@ function onCardSubmitted() {
 onMounted(async () => {
   startStatusPolling();
 
-  if (user.value) {
-    await loadBanks();
-  }
+  await loadBanks();
 });
 
 onBeforeUnmount(() => {
@@ -569,7 +652,7 @@ onBeforeUnmount(() => {
             <n-button quaternary size="small" @click="view = 'landing'">{{ t.navHome }}</n-button>
             <n-button quaternary size="small" @click="view = 'login'">{{ t.navLogin }}</n-button>
             <n-button quaternary size="small" @click="view = 'register'">{{ t.navRegister }}</n-button>
-            <n-button v-if="user" quaternary size="small" @click="view = 'home'">{{ t.navBanks }}</n-button>
+            <n-button quaternary size="small" @click="showBanks">{{ t.navBanks }}</n-button>
           </n-space>
           <p class="section-kicker">{{ t.platformKicker }}</p>
           <h1 class="hero-title">{{ headerTitle }}</h1>
@@ -595,6 +678,7 @@ onBeforeUnmount(() => {
               </p>
               <n-space wrap :size="12" class="hero-actions">
                 <n-button type="primary" size="large" @click="view = 'login'">{{ t.loginNow }}</n-button>
+                <n-button secondary type="primary" size="large" @click="showBanks">{{ t.freeDemo }}</n-button>
                 <n-button tertiary size="large" @click="view = 'register'">{{ t.registerNow }}</n-button>
               </n-space>
             </div>
@@ -635,8 +719,8 @@ onBeforeUnmount(() => {
               <n-tag round type="success">{{ t.transparent }}</n-tag>
             </n-space>
 
-            <n-grid cols="1 m:3" responsive="screen" :x-gap="18" :y-gap="18">
-              <n-grid-item v-for="plan in pricingPlans" :key="plan.name">
+            <n-grid cols="1 m:2 l:4" responsive="screen" :x-gap="18" :y-gap="18">
+              <n-grid-item v-for="plan in pricingPlans" :key="copy(plan.name)">
                 <n-card class="price-card" :bordered="false">
                   <n-space vertical :size="14">
                     <div>
@@ -646,6 +730,34 @@ onBeforeUnmount(() => {
                     </div>
                     <ul class="plain-list">
                       <li v-for="feature in plan.features[lang]" :key="feature">{{ feature }}</li>
+                    </ul>
+                  </n-space>
+                </n-card>
+              </n-grid-item>
+            </n-grid>
+          </section>
+
+          <section class="content-band">
+            <div>
+              <p class="section-kicker">{{ t.accountKicker }}</p>
+              <h2 class="section-title">{{ t.accountTitle }}</h2>
+            </div>
+            <n-grid cols="1 m:2" responsive="screen" :x-gap="18" :y-gap="18">
+              <n-grid-item v-for="item in accountComparison" :key="copy(item.name)">
+                <n-card class="account-card" :bordered="false">
+                  <n-space vertical :size="14">
+                    <n-space justify="space-between" align="start">
+                      <div>
+                        <p class="section-kicker">{{ copy(item.badge) }}</p>
+                        <h3 class="section-title section-title--small">{{ copy(item.name) }}</h3>
+                      </div>
+                      <n-tag round :type="item.type === 'paid' ? 'success' : 'warning'">
+                        {{ copy(item.badge) }}
+                      </n-tag>
+                    </n-space>
+                    <p class="card-copy">{{ copy(item.detail) }}</p>
+                    <ul class="plain-list">
+                      <li v-for="feature in item.features[lang]" :key="feature">{{ feature }}</li>
                     </ul>
                   </n-space>
                 </n-card>
@@ -842,12 +954,21 @@ onBeforeUnmount(() => {
             <div>
               <p class="section-kicker">{{ t.questionBanks }}</p>
               <h2 class="section-title">{{ t.chooseBank }}</h2>
+              <p class="card-copy account-summary">
+                {{ t.currentAccount }}: <strong>{{ accountLabel }}</strong> · {{ accountNote }}
+              </p>
             </div>
             <n-space>
+              <n-tag round :type="accountTagType">{{ accountLabel }}</n-tag>
               <n-button quaternary type="primary" @click="refreshStatus(true)">{{ t.refreshStatus }}</n-button>
-              <n-button tertiary @click="logout">{{ t.logout }}</n-button>
+              <n-button v-if="user" tertiary @click="logout">{{ t.logout }}</n-button>
+              <n-button v-else tertiary @click="view = 'login'">{{ t.loginNow }}</n-button>
             </n-space>
           </n-space>
+
+          <n-alert v-if="!isPaidAccount" type="warning" :show-icon="false" class="section-alert">
+            {{ t.paidLoginHint }}
+          </n-alert>
 
           <n-alert v-if="generalError" type="error" :show-icon="false" class="section-alert">
             {{ generalError }}
@@ -861,10 +982,10 @@ onBeforeUnmount(() => {
                     <n-space justify="space-between" align="start">
                       <div>
                         <p class="section-kicker">{{ bankSubtitle(bank) }}</p>
-                        <h3 class="section-title section-title--small">{{ bank.name }}</h3>
+                        <h3 class="section-title section-title--small">{{ copy(bank.name) }}</h3>
                       </div>
                       <n-tag round type="info">
-                        {{ isZh ? `${bank.questionCount}${t.demoQuestions}` : `${bank.questionCount} ${t.demoQuestions}` }}
+                        {{ questionCountText(bank) }}
                       </n-tag>
                     </n-space>
 
@@ -886,8 +1007,8 @@ onBeforeUnmount(() => {
         <section v-else class="page-section">
           <n-space justify="space-between" align="center" class="section-toolbar">
             <div>
-              <p class="section-kicker">{{ currentBank?.name || "GMSK" }} {{ t.practiceKickerSuffix }}</p>
-              <h2 class="section-title">{{ currentBank?.name || "GMSK" }} {{ t.practiceTitleSuffix }}</h2>
+              <p class="section-kicker">{{ copy(currentBank?.name) || "GMSK" }} {{ t.practiceKickerSuffix }}</p>
+              <h2 class="section-title">{{ copy(currentBank?.name) || "GMSK" }} {{ t.practiceTitleSuffix }}</h2>
             </div>
             <n-space>
               <n-button quaternary type="primary" @click="refreshStatus(true)">{{ t.refreshStatus }}</n-button>

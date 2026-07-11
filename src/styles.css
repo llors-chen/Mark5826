@@ -188,12 +188,22 @@ body {
 }
 
 .feature-card,
+.account-card,
 .bank-card,
 .question-card,
 .status-card {
   border-radius: var(--radius-xl) !important;
   background: var(--bg-layer) !important;
   box-shadow: var(--shadow-soft);
+}
+
+.account-card {
+  min-height: 250px;
+}
+
+.account-summary {
+  margin-top: 8px;
+  max-width: 680px;
 }
 
 .section-toolbar {

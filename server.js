@@ -14,6 +14,7 @@ const DIST_DIR = path.join(ROOT_DIR, "dist");
 const MODEL_ID = "nvidia/nemotron-3-super-120b-a12b:free";
 const MAX_MODEL_CONCURRENCY = 3;
 const STATUS_CACHE_MS = 15_000;
+const FREE_DEMO_LIMIT = 5;
 
 const DEMO_USER = {
   username: "admin",
@@ -24,12 +25,51 @@ const DEMO_USER = {
 const QUESTION_BANKS = [
   {
     id: "gmsk",
-    name: "GMSK",
-    subtitle: "Mixed selective math demo bank",
+    name: { en: "GMSK Mixed Bank", zh: "GMSK 综合题库" },
+    subtitle: { en: "Mixed selective math demo bank", zh: "综合 Selective 数学 demo 题库" },
     description:
-      "A 30-question static demo bank randomly mixed across operations, fractions, geometry, data, ratios, probability, time, and reasoning topics.",
+      {
+        en: "A 30-question static demo bank randomly mixed across operations, fractions, geometry, data, ratios, probability, time, and reasoning topics.",
+        zh: "30 道静态 demo 题，混合运算、分数、几何、数据、比例、概率、时间和推理等主题。",
+      },
     connected: false,
     questionCount: 30,
+  },
+  {
+    id: "year-4-foundation",
+    name: { en: "Year 4 Foundation Bank", zh: "4 年级基础题库" },
+    subtitle: { en: "Year 4 product content", zh: "4 年级产品内容" },
+    description: {
+      en: "Focuses on mental arithmetic, operation order, patterns, and simple word problems for early selective preparation.",
+      zh: "重点展示心算、运算顺序、数字规律和基础应用题，适合 4 年级早期 Selective 备考。",
+    },
+    connected: false,
+    filterDifficulty: "Year 4",
+    questionCount: 7,
+  },
+  {
+    id: "year-5-core",
+    name: { en: "Year 5 Core Bank", zh: "5 年级核心题库" },
+    subtitle: { en: "Year 5 product content", zh: "5 年级产品内容" },
+    description: {
+      en: "Builds stronger skills across fractions, ratios, geometry, data, and multi-step reasoning practice.",
+      zh: "覆盖分数、比例、几何、数据和多步骤推理，突出 5 年级核心能力训练。",
+    },
+    connected: false,
+    filterDifficulty: "Year 5",
+    questionCount: 12,
+  },
+  {
+    id: "year-6-selective",
+    name: { en: "Year 6 Selective Bank", zh: "6 年级冲刺题库" },
+    subtitle: { en: "Year 6 product content", zh: "6 年级产品内容" },
+    description: {
+      en: "Highlights selective-style challenge topics, including percentages, angles, rates, algebra, probability, and advanced reasoning.",
+      zh: "突出 6 年级冲刺内容，包括百分比、角度、速度、代数、概率和高阶推理题。",
+    },
+    connected: false,
+    filterDifficulty: "Year 6",
+    questionCount: 11,
   },
 ];
 
@@ -932,6 +972,7 @@ async function handleLogin(req, res) {
       user: {
         username: DEMO_USER.username,
         displayName: DEMO_USER.displayName,
+        accountType: "paid",
       },
     });
   }
@@ -942,13 +983,47 @@ async function handleLogin(req, res) {
   });
 }
 
-function handleBanks(res) {
-  sendJson(res, 200, {
-    banks: QUESTION_BANKS,
+function normalizeAccountType(value) {
+  return value === "paid" ? "paid" : "free";
+}
+
+function getBaseQuestionsForBank(bank) {
+  return QUESTIONS.filter((question) => {
+    if (bank.filterDifficulty) {
+      return question.difficulty === bank.filterDifficulty;
+    }
+
+    return question.bankId === bank.id;
   });
 }
 
-function handleQuestions(res, bankId) {
+function getVisibleQuestionsForBank(bank, accountType) {
+  const questions = getBaseQuestionsForBank(bank);
+  return accountType === "free" ? questions.slice(0, FREE_DEMO_LIMIT) : questions;
+}
+
+function handleBanks(res, searchParams) {
+  const accountType = normalizeAccountType(searchParams.get("account"));
+  const banks = QUESTION_BANKS.map((bank) => {
+    const fullQuestionCount = getBaseQuestionsForBank(bank).length;
+    const questionCount = accountType === "free" ? Math.min(FREE_DEMO_LIMIT, fullQuestionCount) : fullQuestionCount;
+
+    return {
+      ...bank,
+      accountType,
+      questionCount,
+      fullQuestionCount,
+      demoLimit: FREE_DEMO_LIMIT,
+    };
+  });
+
+  sendJson(res, 200, {
+    accountType,
+    banks,
+  });
+}
+
+function handleQuestions(res, bankId, searchParams) {
   const bank = QUESTION_BANKS.find((item) => item.id === bankId);
   if (!bank) {
     return sendJson(res, 404, {
@@ -956,9 +1031,19 @@ function handleQuestions(res, bankId) {
     });
   }
 
-  const questions = QUESTIONS.filter((question) => question.bankId === bankId).map((question) => ({
+  const accountType = normalizeAccountType(searchParams.get("account"));
+  const fullQuestionCount = getBaseQuestionsForBank(bank).length;
+  const visibleQuestions = getVisibleQuestionsForBank(bank, accountType);
+  const bankPayload = {
+    ...bank,
+    accountType,
+    questionCount: visibleQuestions.length,
+    fullQuestionCount,
+    demoLimit: FREE_DEMO_LIMIT,
+  };
+  const questions = visibleQuestions.map((question) => ({
     id: question.id,
-    bankId: question.bankId,
+    bankId: bank.id,
     title: question.title,
     concept: question.concept,
     difficulty: question.difficulty,
@@ -966,7 +1051,8 @@ function handleQuestions(res, bankId) {
   }));
 
   return sendJson(res, 200, {
-    bank,
+    bank: bankPayload,
+    accountType,
     questions,
   });
 }
@@ -1015,18 +1101,18 @@ async function handleSubmission(req, res, questionId) {
   });
 }
 
-async function handleApi(req, res, pathname) {
+async function handleApi(req, res, pathname, searchParams) {
   if (req.method === "POST" && pathname === "/api/login") {
     return handleLogin(req, res);
   }
 
   if (req.method === "GET" && pathname === "/api/banks") {
-    return handleBanks(res);
+    return handleBanks(res, searchParams);
   }
 
   const questionsMatch = pathname.match(/^\/api\/banks\/([^/]+)\/questions$/);
   if (req.method === "GET" && questionsMatch) {
-    return handleQuestions(res, questionsMatch[1]);
+    return handleQuestions(res, questionsMatch[1], searchParams);
   }
 
   const submitMatch = pathname.match(/^\/api\/questions\/([^/]+)\/submit$/);
@@ -1060,7 +1146,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (requestUrl.pathname.startsWith("/api/")) {
-      return await handleApi(req, res, requestUrl.pathname);
+      return await handleApi(req, res, requestUrl.pathname, requestUrl.searchParams);
     }
 
     if (requestUrl.pathname === "/" || requestUrl.pathname.startsWith("/app")) {
