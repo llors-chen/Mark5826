@@ -190,6 +190,7 @@ body {
 .feature-card,
 .account-card,
 .bank-card,
+.dashboard-card,
 .question-card,
 .status-card {
   border-radius: var(--radius-xl) !important;
@@ -204,6 +205,186 @@ body {
 .account-summary {
   margin-top: 8px;
   max-width: 680px;
+}
+
+.dashboard-page {
+  gap: 24px;
+}
+
+.dashboard-intro {
+  max-width: 820px;
+  margin: 8px 0 0;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.metric-card {
+  display: grid;
+  gap: 12px;
+  min-height: 156px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--bg-layer);
+  box-shadow: var(--shadow-soft);
+}
+
+.metric-card strong {
+  color: #1e3a8a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.metric-card span {
+  color: var(--text-muted);
+}
+
+.dashboard-card {
+  min-height: 360px;
+}
+
+.chart-card {
+  overflow: hidden;
+}
+
+.line-chart {
+  width: 100%;
+  min-height: 260px;
+}
+
+.chart-axis {
+  stroke: rgba(31, 41, 55, 0.22);
+  stroke-width: 2;
+}
+
+.chart-gridline {
+  stroke: rgba(31, 41, 55, 0.08);
+  stroke-width: 2;
+}
+
+.chart-line {
+  fill: none;
+  stroke: #1d4ed8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 5;
+}
+
+.chart-point {
+  fill: #ffffff;
+  stroke: #1d4ed8;
+  stroke-width: 4;
+}
+
+.chart-label,
+.chart-value {
+  fill: var(--text-muted);
+  font-family: "Aptos", "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+}
+
+.chart-value {
+  fill: #1e3a8a;
+  font-weight: 700;
+}
+
+.topic-progress-list,
+.review-plan-list {
+  display: grid;
+  gap: 16px;
+}
+
+.topic-progress-item,
+.review-plan-item {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.topic-progress-item strong,
+.topic-progress-item span,
+.review-plan-item strong,
+.review-plan-item span {
+  display: block;
+}
+
+.topic-progress-item span,
+.topic-progress-item small,
+.review-plan-item p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.progress-track {
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #d97706, #1d4ed8);
+}
+
+.progress-fill--muted {
+  background: linear-gradient(90deg, #15803d, #1d4ed8);
+}
+
+.mistake-table {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.mistake-table__row {
+  display: grid;
+  grid-template-columns: 90px minmax(220px, 1.7fr) 120px 120px minmax(150px, 0.9fr);
+  gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+  border-top: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.52);
+}
+
+.mistake-table__row:first-child {
+  border-top: 0;
+}
+
+.mistake-table__row--head {
+  background: rgba(29, 78, 216, 0.1);
+  color: #1e3a8a;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mistake-table__row span {
+  min-width: 0;
+}
+
+.mistake-table__row strong,
+.mistake-table__row small {
+  display: block;
+}
+
+.mistake-table__row small {
+  margin-top: 4px;
+  color: var(--text-muted);
+  line-height: 1.45;
 }
 
 .section-toolbar {
@@ -399,8 +580,17 @@ code {
   }
 
   .home-hero,
-  .course-timeline {
+  .course-timeline,
+  .metric-grid {
     grid-template-columns: 1fr;
+  }
+
+  .mistake-table {
+    overflow-x: auto;
+  }
+
+  .mistake-table__row {
+    min-width: 860px;
   }
 }
 

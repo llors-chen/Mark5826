@@ -169,18 +169,109 @@ const courseGuide = [
   },
 ];
 
+const reviewMetrics = [
+  {
+    label: { en: "Questions practised", zh: "累计练习题数" },
+    value: "186",
+    delta: { en: "+24 this week", zh: "本周 +24" },
+    tone: "info",
+  },
+  {
+    label: { en: "Current accuracy", zh: "当前正确率" },
+    value: "76%",
+    delta: { en: "+8% from last week", zh: "较上周 +8%" },
+    tone: "success",
+  },
+  {
+    label: { en: "Mistakes to review", zh: "待复盘错题" },
+    value: "18",
+    delta: { en: "6 high priority", zh: "6 道高优先级" },
+    tone: "warning",
+  },
+  {
+    label: { en: "AI explanations read", zh: "已读 AI 讲解" },
+    value: "43",
+    delta: { en: "12 repeated concepts", zh: "12 个重复概念" },
+    tone: "primary",
+  },
+];
+
+const accuracyTrend = [
+  { day: "Mon", accuracy: 62 },
+  { day: "Tue", accuracy: 66 },
+  { day: "Wed", accuracy: 64 },
+  { day: "Thu", accuracy: 71 },
+  { day: "Fri", accuracy: 73 },
+  { day: "Sat", accuracy: 78 },
+  { day: "Sun", accuracy: 76 },
+];
+
+const topicWeakness = [
+  { topic: { en: "Fractions and ratios", zh: "分数与比例" }, accuracy: 58, errors: 7, priority: "High" },
+  { topic: { en: "Geometry angles", zh: "几何角度" }, accuracy: 64, errors: 5, priority: "High" },
+  { topic: { en: "Word problem modelling", zh: "应用题建模" }, accuracy: 69, errors: 4, priority: "Medium" },
+  { topic: { en: "Speed arithmetic", zh: "速度运算" }, accuracy: 82, errors: 2, priority: "Low" },
+];
+
+const mistakeRecords = [
+  {
+    id: "M-014",
+    bank: { en: "Year 5 Core Bank", zh: "5 年级核心题库" },
+    concept: { en: "Fractions", zh: "分数" },
+    prompt: {
+      en: "What is 5/8 of 40?",
+      zh: "40 的 5/8 是多少？",
+    },
+    submitted: "20",
+    correct: "25",
+    status: { en: "Needs second attempt", zh: "需要二次练习" },
+  },
+  {
+    id: "M-021",
+    bank: { en: "Year 6 Selective Bank", zh: "6 年级冲刺题库" },
+    concept: { en: "Rates", zh: "速度与比率" },
+    prompt: {
+      en: "A train travels 45 km in 30 minutes. What is its speed in km/h?",
+      zh: "火车 30 分钟行驶 45 km，速度是多少 km/h？",
+    },
+    submitted: "75",
+    correct: "90",
+    status: { en: "Reviewed with AI", zh: "已用 AI 讲解复盘" },
+  },
+  {
+    id: "M-033",
+    bank: { en: "Year 4 Foundation Bank", zh: "4 年级基础题库" },
+    concept: { en: "Patterns", zh: "数字规律" },
+    prompt: {
+      en: "Find the next number: 3, 7, 11, 15, ?",
+      zh: "找下一个数：3, 7, 11, 15, ?",
+    },
+    submitted: "18",
+    correct: "19",
+    status: { en: "Marked for warm-up", zh: "加入热身练习" },
+  },
+];
+
+const reviewPlan = [
+  { time: { en: "Today", zh: "今天" }, task: { en: "Redo 6 fraction and ratio questions", zh: "重做 6 道分数与比例题" }, progress: 65 },
+  { time: { en: "Tomorrow", zh: "明天" }, task: { en: "Review geometry angle explanations", zh: "复盘几何角度讲解" }, progress: 40 },
+  { time: { en: "Weekend", zh: "周末" }, task: { en: "Complete a mixed Year 5 timed set", zh: "完成一组 5 年级混合限时练习" }, progress: 25 },
+];
+
 const i18n = {
   en: {
     navHome: "Home",
     navLogin: "Login",
     navRegister: "Register",
     navBanks: "Banks",
+    navReview: "Mistake Review",
     languageButton: "中文",
     platformKicker: "Selective Math Learning Platform",
     landingTitle: "Selective Math Growth Studio",
     registerTitle: "Create Your Learning Account",
     loginTitle: "Welcome Back to Selective Math",
     defaultTitle: "Math Learning Platform for Years 4-6",
+    reviewTitle: "Mistake Review Dashboard",
     landingDescription:
       "A Years 4-6 selective math training site with public pricing, topic-focused content, partner information, and a course guide.",
     registerDescription: "A polished registration preview. The form is visual only for now.",
@@ -189,6 +280,8 @@ const i18n = {
       "Submit an answer to flip the card. Incorrect answers trigger a short AI explanation.",
     defaultDescription:
       "Login, question bank selection, flashcard practice, and model status monitoring are all connected.",
+    reviewDescription:
+      "A static dashboard for reviewing wrong answers, tracking accuracy, and planning the next practice cycle.",
     heroKicker: "Years 4-6 Selective Prep",
     heroTitle:
       "Practice, explanations, review, and course planning in one calm learning space.",
@@ -280,23 +373,40 @@ const i18n = {
     noQuestionsTitle: "Questions have not loaded yet",
     noQuestionsDescription:
       "This bank currently uses demo data. Once a live question bank is connected, the question list will appear here.",
+    reviewKicker: "Learning Operations",
+    reviewHeading: "Mistake Review Dashboard",
+    reviewIntro:
+      "Static sample data showing how parents and students can monitor weak topics, accuracy changes, AI explanations, and next review actions.",
+    weeklyAccuracy: "Weekly accuracy trend",
+    weakTopics: "Weak topic diagnosis",
+    recentMistakes: "Recent mistake records",
+    reviewPlan: "Review plan",
+    errorCount: "errors",
+    accuracy: "Accuracy",
+    submittedAnswer: "Submitted",
+    correctAnswer: "Correct",
+    priority: "Priority",
+    progress: "Progress",
   },
   zh: {
     navHome: "首页",
     navLogin: "登录",
     navRegister: "注册",
     navBanks: "题库",
+    navReview: "错题整理",
     languageButton: "EN",
     platformKicker: "Selective 数学学习平台",
     landingTitle: "Selective 数学成长工作室",
     registerTitle: "创建学习账号",
     loginTitle: "欢迎回到 Selective 数学平台",
     defaultTitle: "4-6 年级数学学习平台",
+    reviewTitle: "错题整理 Dashboard",
     landingDescription: "面向 Years 4-6 的数学择校训练：首页展示价格公示、题目方向、招商合作和课程指南。",
     registerDescription: "这是一个精修后的注册页视觉稿，目前只展示样式。",
     loginDescription: "使用 demo 账号进入现有题库体验。",
     practiceDescription: "提交答案后卡片会翻面。答错时会触发简短 AI 讲解。",
     defaultDescription: "登录、题库选择、翻卡练习和模型状态监控都已经连通。",
+    reviewDescription: "用于整理错题、追踪正确率和规划下一轮练习的静态 dashboard 页面。",
     heroKicker: "4-6 年级 Selective 备考",
     heroTitle: "把练题、讲解、复盘和课程规划放在一个安静清晰的学习空间里。",
     heroSubtitle:
@@ -382,6 +492,19 @@ const i18n = {
       "每道题都会以卡片形式展示。提交后卡片翻面显示答案；如果答错，nvidia/nemotron-3-super-120b-a12b:free 会为 4-6 年级学生提供简短讲解。",
     noQuestionsTitle: "题目还没有加载",
     noQuestionsDescription: "当前题库使用 demo 数据。接入真实题库后，题目列表会显示在这里。",
+    reviewKicker: "学习运营后台",
+    reviewHeading: "错题整理 Dashboard",
+    reviewIntro: "使用随机静态数据展示家长和学生如何查看薄弱主题、正确率变化、AI 讲解和下一步复习动作。",
+    weeklyAccuracy: "每周正确率趋势",
+    weakTopics: "薄弱知识点诊断",
+    recentMistakes: "近期错题记录",
+    reviewPlan: "复习计划",
+    errorCount: "道错题",
+    accuracy: "正确率",
+    submittedAnswer: "提交答案",
+    correctAnswer: "正确答案",
+    priority: "优先级",
+    progress: "进度",
   },
 };
 
@@ -392,6 +515,15 @@ const isPaidAccount = computed(() => accountType.value === "paid");
 const accountLabel = computed(() => (isPaidAccount.value ? t.value.paidAccount : t.value.freeAccount));
 const accountNote = computed(() => (isPaidAccount.value ? t.value.paidAccountNote : t.value.freeAccountNote));
 const accountTagType = computed(() => (isPaidAccount.value ? "success" : "warning"));
+const accuracyTrendPoints = computed(() =>
+  accuracyTrend
+    .map((point, index) => {
+      const x = 44 + index * 88;
+      const y = 190 - point.accuracy * 1.65;
+      return `${x},${y}`;
+    })
+    .join(" "),
+);
 
 const themeOverrides = {
   common: {
@@ -422,6 +554,10 @@ const headerTitle = computed(() => {
     return t.value.loginTitle;
   }
 
+  if (view.value === "review") {
+    return t.value.reviewTitle;
+  }
+
   if (view.value === "practice" && currentBank.value) {
     return `${copy(currentBank.value.name)} ${t.value.practiceTitleSuffix}`;
   }
@@ -444,6 +580,10 @@ const statusDescription = computed(() => {
 
   if (view.value === "practice") {
     return t.value.practiceDescription;
+  }
+
+  if (view.value === "review") {
+    return t.value.reviewDescription;
   }
 
   return t.value.defaultDescription;
@@ -483,6 +623,18 @@ function showBanks() {
   if (!banks.value.length) {
     loadBanks();
   }
+}
+
+function priorityTagType(priority) {
+  if (priority === "High") {
+    return "error";
+  }
+
+  if (priority === "Medium") {
+    return "warning";
+  }
+
+  return "success";
 }
 
 function readStoredUser() {
@@ -653,6 +805,7 @@ onBeforeUnmount(() => {
             <n-button quaternary size="small" @click="view = 'login'">{{ t.navLogin }}</n-button>
             <n-button quaternary size="small" @click="view = 'register'">{{ t.navRegister }}</n-button>
             <n-button quaternary size="small" @click="showBanks">{{ t.navBanks }}</n-button>
+            <n-button quaternary size="small" @click="view = 'review'">{{ t.navReview }}</n-button>
           </n-space>
           <p class="section-kicker">{{ t.platformKicker }}</p>
           <h1 class="hero-title">{{ headerTitle }}</h1>
@@ -943,6 +1096,135 @@ onBeforeUnmount(() => {
                   <n-alert type="warning" :show-icon="false">
                     {{ t.registerNotice }}
                   </n-alert>
+                </n-space>
+              </n-card>
+            </n-grid-item>
+          </n-grid>
+        </section>
+
+        <section v-else-if="view === 'review'" class="page-section dashboard-page">
+          <n-space justify="space-between" align="center" class="section-toolbar">
+            <div>
+              <p class="section-kicker">{{ t.reviewKicker }}</p>
+              <h2 class="section-title">{{ t.reviewHeading }}</h2>
+              <p class="card-copy dashboard-intro">{{ t.reviewIntro }}</p>
+            </div>
+            <n-space>
+              <n-tag round :type="accountTagType">{{ accountLabel }}</n-tag>
+              <n-button tertiary @click="showBanks">{{ t.navBanks }}</n-button>
+            </n-space>
+          </n-space>
+
+          <div class="metric-grid">
+            <div v-for="metric in reviewMetrics" :key="copy(metric.label)" class="metric-card">
+              <n-tag round :type="metric.tone">{{ copy(metric.label) }}</n-tag>
+              <strong>{{ metric.value }}</strong>
+              <span>{{ copy(metric.delta) }}</span>
+            </div>
+          </div>
+
+          <n-grid cols="1 l:2" responsive="screen" :x-gap="24" :y-gap="24">
+            <n-grid-item>
+              <n-card class="dashboard-card chart-card" :bordered="false">
+                <n-space vertical :size="16">
+                  <div>
+                    <p class="section-kicker">{{ t.accuracy }}</p>
+                    <h3 class="section-title section-title--small">{{ t.weeklyAccuracy }}</h3>
+                  </div>
+                  <svg class="line-chart" viewBox="0 0 620 220" role="img">
+                    <line x1="44" y1="40" x2="44" y2="190" class="chart-axis" />
+                    <line x1="44" y1="190" x2="590" y2="190" class="chart-axis" />
+                    <line x1="44" y1="91" x2="590" y2="91" class="chart-gridline" />
+                    <line x1="44" y1="58" x2="590" y2="58" class="chart-gridline" />
+                    <polyline :points="accuracyTrendPoints" class="chart-line" />
+                    <g v-for="(point, index) in accuracyTrend" :key="point.day">
+                      <circle :cx="44 + index * 88" :cy="190 - point.accuracy * 1.65" r="6" class="chart-point" />
+                      <text :x="32 + index * 88" y="215" class="chart-label">{{ point.day }}</text>
+                      <text :x="26 + index * 88" :y="178 - point.accuracy * 1.65" class="chart-value">{{ point.accuracy }}%</text>
+                    </g>
+                  </svg>
+                </n-space>
+              </n-card>
+            </n-grid-item>
+
+            <n-grid-item>
+              <n-card class="dashboard-card" :bordered="false">
+                <n-space vertical :size="18">
+                  <div>
+                    <p class="section-kicker">{{ t.priority }}</p>
+                    <h3 class="section-title section-title--small">{{ t.weakTopics }}</h3>
+                  </div>
+                  <div class="topic-progress-list">
+                    <div v-for="topic in topicWeakness" :key="copy(topic.topic)" class="topic-progress-item">
+                      <n-space justify="space-between" align="center">
+                        <div>
+                          <strong>{{ copy(topic.topic) }}</strong>
+                          <span>{{ topic.errors }} {{ t.errorCount }}</span>
+                        </div>
+                        <n-tag round :type="priorityTagType(topic.priority)">{{ topic.priority }}</n-tag>
+                      </n-space>
+                      <div class="progress-track">
+                        <div class="progress-fill" :style="{ width: `${topic.accuracy}%` }"></div>
+                      </div>
+                      <small>{{ t.accuracy }} {{ topic.accuracy }}%</small>
+                    </div>
+                  </div>
+                </n-space>
+              </n-card>
+            </n-grid-item>
+          </n-grid>
+
+          <n-grid cols="1 xl:3" responsive="screen" :x-gap="24" :y-gap="24">
+            <n-grid-item span="1 xl:2">
+              <n-card class="dashboard-card" :bordered="false">
+                <n-space vertical :size="18">
+                  <div>
+                    <p class="section-kicker">{{ t.mistakeReview }}</p>
+                    <h3 class="section-title section-title--small">{{ t.recentMistakes }}</h3>
+                  </div>
+                  <div class="mistake-table">
+                    <div class="mistake-table__row mistake-table__row--head">
+                      <span>ID</span>
+                      <span>Concept</span>
+                      <span>{{ t.submittedAnswer }}</span>
+                      <span>{{ t.correctAnswer }}</span>
+                      <span>Status</span>
+                    </div>
+                    <div v-for="record in mistakeRecords" :key="record.id" class="mistake-table__row">
+                      <span>{{ record.id }}</span>
+                      <span>
+                        <strong>{{ copy(record.concept) }}</strong>
+                        <small>{{ copy(record.bank) }}</small>
+                        <small>{{ copy(record.prompt) }}</small>
+                      </span>
+                      <span>{{ record.submitted }}</span>
+                      <span>{{ record.correct }}</span>
+                      <span><n-tag round type="info">{{ copy(record.status) }}</n-tag></span>
+                    </div>
+                  </div>
+                </n-space>
+              </n-card>
+            </n-grid-item>
+
+            <n-grid-item>
+              <n-card class="dashboard-card" :bordered="false">
+                <n-space vertical :size="18">
+                  <div>
+                    <p class="section-kicker">{{ t.progress }}</p>
+                    <h3 class="section-title section-title--small">{{ t.reviewPlan }}</h3>
+                  </div>
+                  <div class="review-plan-list">
+                    <div v-for="item in reviewPlan" :key="copy(item.time)" class="review-plan-item">
+                      <n-space justify="space-between" align="start">
+                        <strong>{{ copy(item.time) }}</strong>
+                        <span>{{ item.progress }}%</span>
+                      </n-space>
+                      <p>{{ copy(item.task) }}</p>
+                      <div class="progress-track">
+                        <div class="progress-fill progress-fill--muted" :style="{ width: `${item.progress}%` }"></div>
+                      </div>
+                    </div>
+                  </div>
                 </n-space>
               </n-card>
             </n-grid-item>

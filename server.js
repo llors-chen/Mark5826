@@ -71,9 +71,92 @@ const QUESTION_BANKS = [
     filterDifficulty: "Year 6",
     questionCount: 11,
   },
+  {
+    id: "mistake-collection",
+    name: { en: "Mistake Collection Bank", zh: "错题收集题库" },
+    subtitle: { en: "Collected wrong-answer review", zh: "错题集中复盘" },
+    description: {
+      en: "A dedicated bank for collecting repeated mistakes and turning them into short targeted review tasks.",
+      zh: "专门用于收集学生反复出错的题目，并整理成短小的针对性复盘练习。",
+    },
+    connected: false,
+    questionCount: 6,
+  },
 ];
 
 const QUESTIONS = [
+  {
+    id: "m1",
+    bankId: "mistake-collection",
+    title: "Repeated Fraction Mistake",
+    concept: "Fractions",
+    difficulty: "Review",
+    prompt: "A student answered 3/5 of 45 as 18. What is the correct answer?",
+    answerText: "27",
+    acceptedAnswers: ["27"],
+    fallbackExplanation:
+      "To find 3/5 of 45, divide 45 by 5 to get 9, then multiply by 3. The correct answer is 27.",
+  },
+  {
+    id: "m2",
+    bankId: "mistake-collection",
+    title: "Angle Review",
+    concept: "Geometry",
+    difficulty: "Review",
+    prompt: "Two angles in a triangle are 42° and 68°. What is the third angle?",
+    answerText: "70°",
+    acceptedAnswers: ["70", "70°", "70degrees"],
+    fallbackExplanation:
+      "Angles in a triangle add to 180°. Calculate 180 - 42 - 68 = 70°.",
+  },
+  {
+    id: "m3",
+    bankId: "mistake-collection",
+    title: "Rate Correction",
+    concept: "Rates",
+    difficulty: "Review",
+    prompt: "A bike travels 18 km in 30 minutes. What is the speed in km/h?",
+    answerText: "36 km/h",
+    acceptedAnswers: ["36", "36km/h", "36kmh"],
+    fallbackExplanation:
+      "Thirty minutes is half an hour. If the bike travels 18 km in half an hour, it travels 36 km in one hour.",
+  },
+  {
+    id: "m4",
+    bankId: "mistake-collection",
+    title: "Pattern Fix",
+    concept: "Patterns",
+    difficulty: "Review",
+    prompt: "Find the next number: 4, 9, 14, 19, ?",
+    answerText: "24",
+    acceptedAnswers: ["24"],
+    fallbackExplanation:
+      "Each number increases by 5. Add 5 to 19 to get 24.",
+  },
+  {
+    id: "m5",
+    bankId: "mistake-collection",
+    title: "Percentage Review",
+    concept: "Percentages",
+    difficulty: "Review",
+    prompt: "A student calculated 20% of 150 as 20. What is the correct answer?",
+    answerText: "30",
+    acceptedAnswers: ["30"],
+    fallbackExplanation:
+      "20% means 20 out of 100, or one fifth. One fifth of 150 is 30.",
+  },
+  {
+    id: "m6",
+    bankId: "mistake-collection",
+    title: "Word Problem Rebuild",
+    concept: "Word Problems",
+    difficulty: "Review",
+    prompt: "There are 6 bags with 8 marbles each. If 12 marbles are removed, how many remain?",
+    answerText: "36",
+    acceptedAnswers: ["36", "36marbles"],
+    fallbackExplanation:
+      "First find the total marbles: 6 × 8 = 48. Then subtract 12, so 48 - 12 = 36.",
+  },
   {
     id: "q1",
     bankId: "gmsk",
